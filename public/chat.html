@@ -11,7 +11,13 @@
 </head>
 
 <body>
-    <div class="sidebar">
+    <!-- Mobile Menu Toggle -->
+    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
+
+    <div class="sidebar" id="sidebar">
         <h1 style="font-size: 1.5rem; text-align: left;">SocketChat</h1>
         <div style="margin-top: 40px;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">

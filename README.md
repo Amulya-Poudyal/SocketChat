@@ -17,7 +17,7 @@ SocketChat is a modern, real-time messaging application built with a robust Node
     - **Typing Indicators**: In-chat visual feedback when someone is typing.
     - **Profile Management**: View account details, joined date, and administrative status.
 - **Secure Authentication**: JWT-based user login and registration with hashed passwords.
-- **Modern UI**: A premium, responsive interface with Outfit typography and glassmorphic aesthetics.
+
 
 ## 🛠️ Tech Stack
 

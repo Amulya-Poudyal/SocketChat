@@ -53,6 +53,54 @@
         button {
             width: auto;
         }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 24px;
+                max-width: 90%;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            p {
+                font-size: 1rem;
+                margin-bottom: 30px;
+            }
+
+            .btn-group {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            button {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+                border-radius: 24px;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+                margin-bottom: 12px;
+            }
+
+            p {
+                font-size: 0.9rem;
+                margin-bottom: 24px;
+            }
+
+            button {
+                font-size: 0.95rem;
+                padding: 14px;
+            }
+        }
     </style>
 </head>
 

@@ -386,4 +386,27 @@ document.getElementById("messageInput").addEventListener("keypress", (e) => {
     if (e.key === "Enter") sendMessage();
 });
 
+// Mobile sidebar toggle
+function toggleSidebar() {
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.querySelector(".sidebar-overlay");
+
+    sidebar.classList.toggle("open");
+    overlay.classList.toggle("active");
+}
+
+// Close sidebar when clicking on a channel (mobile)
+const originalSwitchChannel = switchChannel;
+switchChannel = function (id, name, inviteCode) {
+    originalSwitchChannel(id, name, inviteCode);
+
+    // Close sidebar on mobile after selecting a channel
+    if (window.innerWidth <= 768) {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.querySelector(".sidebar-overlay");
+        sidebar.classList.remove("open");
+        overlay.classList.remove("active");
+    }
+};
+
 init();

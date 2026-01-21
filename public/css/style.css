@@ -42,13 +42,15 @@ body {
         opacity: 0;
         transform: translateY(20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-h1, h2 {
+h1,
+h2 {
     margin-top: 0;
     font-weight: 600;
     letter-spacing: -0.025em;
@@ -137,4 +139,70 @@ button:active {
     font-size: 0.875rem;
     text-align: center;
     min-height: 1.25rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 16px;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .auth-container {
+        padding: 24px;
+        max-width: 100%;
+        margin: auto;
+    }
+
+    h1,
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    input,
+    button {
+        font-size: 16px;
+        /* Prevents zoom on iOS */
+        padding: 14px 16px;
+    }
+
+    button {
+        padding: 14px;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 20px;
+        border-radius: 16px;
+    }
+
+    h1,
+    h2 {
+        font-size: 1.25rem;
+    }
+
+    input {
+        padding: 12px;
+    }
+
+    button {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+}
+
+/* Touch-friendly improvements */
+@media (hover: none) and (pointer: coarse) {
+
+    button,
+    .link {
+        min-height: 44px;
+        /* iOS recommended touch target */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 }
