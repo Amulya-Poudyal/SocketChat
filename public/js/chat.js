@@ -5,6 +5,24 @@ if (!token) {
     location.href = "login.html";
 }
 
+// Check if token is expired BEFORE attempting WebSocket connection
+function isTokenExpired(token) {
+    try {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const expiryTime = payload.exp * 1000; // Convert to milliseconds
+        return Date.now() >= expiryTime;
+    } catch (e) {
+        return true; // If we can't parse it, treat it as expired
+    }
+}
+
+// Redirect to login if token is expired
+if (isTokenExpired(token)) {
+    console.log("Token expired, redirecting to login...");
+    localStorage.clear();
+    location.href = "login.html";
+}
+
 document.getElementById("currentUser").textContent = `Logged in as: ${currentUsername}`;
 
 let ws;
@@ -67,10 +85,18 @@ function connectWebSocket() {
         }
     };
 
-    ws.onclose = () => {
+    ws.onclose = (event) => {
         document.getElementById("status").textContent = "○ Disconnected";
         document.getElementById("status").style.color = "#ef4444";
-        setTimeout(connectWebSocket, 3000);
+
+        // If the server closed the connection because of an Auth error (code 1008), 
+        // redirect to login instead of trying to reconnect forever.
+        if (event.code === 1008) {
+            console.error("Authentication failed or token expired. Redirecting to login...");
+            logout();
+        } else {
+            setTimeout(connectWebSocket, 3000);
+        }
     };
 
     ws.onerror = (err) => {

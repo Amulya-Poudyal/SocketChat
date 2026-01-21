@@ -1,7 +1,7 @@
+import 'dotenv/config';
 import jwt from "jsonwebtoken";
 import { WebSocketServer } from "ws";
 import Message from "./models/message.js";
-import 'dotenv/config'
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
@@ -14,6 +14,7 @@ import userRoutes from './routes/userRoutes.js';
 import channelRoutes from './routes/channelRoutes.js';
 import Channel from "./models/channel.js";
 import User from "./models/user.js";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -23,18 +24,27 @@ const wss = new WebSocketServer({ server });
 app.set('wss', wss);
 
 const PORT = process.env.PORT || 3000;
+const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key';
 
 app.use(cors());
 app.use(express.json());
 
 // Serve static files from the 'public' directory
-app.use(express.static(path.join(__dirname, '../public')));
+// Adding 'extensions' allows users to visit /login instead of /login.html
+app.use(express.static(path.join(__dirname, '../public'), {
+    extensions: ['html', 'htm']
+}));
 
 app.use("/auth", authRouter);
 app.use("/messages", messageRouter);
-app.use("/", authRouter);
 app.use("/user", userRoutes);
 app.use("/channels", channelRoutes);
+
+// Fallback: Serve index.html for any unknown GET requests (good for refresh)
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../public/index.html'));
+});
+
 wss.on("connection", async (ws, req) => {
     try {
         const url = new URL(req.url, `http://${req.headers.host}`);
@@ -46,7 +56,7 @@ wss.on("connection", async (ws, req) => {
             return;
         }
 
-        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_secret_key');
+        const decoded = jwt.verify(token, JWT_SECRET);
         ws.username = decoded.username;
         ws.userId = decoded.id;
         ws.isAdmin = decoded.isAdmin;
@@ -55,7 +65,7 @@ wss.on("connection", async (ws, req) => {
         console.log("WS connected:", ws.username);
 
     } catch (err) {
-        console.error("WS Auth Error:", err.message);
+        console.error("WS Auth Error Details:", err.message); // Improved log
         ws.close(1008, "Auth failed");
         return;
     }

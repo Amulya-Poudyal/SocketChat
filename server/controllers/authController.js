@@ -33,6 +33,8 @@ export const promoteToAdmin = async (req, res) => {
 };
 
 // ---------------- LOGIN ----------------
+const JWT_SECRET = process.env.JWT_SECRET || 'your_secret_key';
+
 export const loginUser = async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) return res.status(400).json({ message: "Both Fields are required" });
@@ -46,13 +48,13 @@ export const loginUser = async (req, res) => {
 
         const token = jwt.sign(
             { id: user._id, username: user.username, isAdmin: user.isAdmin },
-            process.env.JWT_SECRET,
-            { expiresIn: "1h" }
+            JWT_SECRET,
+            { expiresIn: "7d" } // Increased from 1h to 7d for better UX
         );
 
         res.json({ success: true, username: user.username, token });
     } catch (err) {
-        console.error(err);
+        console.error("Login catch Error:", err);
         res.status(500).json({ message: "Server error" });
     }
 };
