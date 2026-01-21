@@ -84,7 +84,7 @@ SocketChat/
    ```
 
 5. **Access the app**:
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
+   Open https://socketchat-t312.onrender.com in your browser
 
 ## 🔑 Administrative Access
 
