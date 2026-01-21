@@ -1,51 +1,89 @@
-# SocketChat
+# SocketChat 🚀
 
-SocketChat is a real-time chat application built using Node.js and MongoDB. It leverages Mongoose for data modeling and serves static assets for the client interface.
+SocketChat is a modern, real-time messaging application built with a robust Node.js backend and a sleek, glassmorphic frontend. It features secure authentication, persistent chat history, and instantaneous message delivery using WebSockets.
 
-## Features
+## ✨ Features
 
-- **Real-time Communication**: Instant messaging capabilities.
-- **Data Persistence**: Chat history and user data stored in MongoDB.
-- **Static File Serving**: Serves the frontend application directly.
+- **Real-time Messaging**: Instant communication powered by WebSockets (`ws`).
+- **Secure Authentication**: JWT-based user login and registration with hashed passwords.
+- **Persistent Storage**: MongoDB for storing users and chat history.
+- **Message History**: Automatic retrieval of recent chat history upon connection.
+- **Modern UI**: A beautiful, responsive interface with Outfit typography and glassmorphic design.
+- **Systematic Organization**: Clean separation of concerns between frontend and backend.
 
-## Tech Stack
+## 🛠️ Tech Stack
 
-- **Runtime**: Node.js
-- **Database**: MongoDB
-- **ODM**: Mongoose
-- **Utilities**: `serve-static`, `send`, `qs`
+- **Backend**: Node.js, Express.js
+- **Database**: MongoDB, Mongoose
+- **Real-time**: WebSockets (`ws`)
+- **Security**: JSON Web Tokens (JWT), Bcrypt
+- **Frontend**: Vanilla HTML5, CSS3 (Variables, Flexbox, Animations), JavaScript (ES6+)
 
-## Prerequisites
+## 📂 Project Structure
 
-Ensure you have the following installed on your local machine:
+```text
+SocketChat/
+├── public/                 # Frontend assets
+│   ├── css/                # Stylesheets (Shared & Page-specific)
+│   ├── js/                 # Client-side logic & API handlers
+│   ├── index.html          # Landing page
+│   ├── login.html          # Authentication page
+│   ├── register.html       # Signup page
+│   └── chat.html           # Main chat interface
+├── server/                 # Backend source code
+│   ├── controllers/        # Request handlers
+│   ├── middlewares/        # Authentication & Logger middlewares
+│   ├── models/             # Mongoose schemas
+│   ├── routes/             # API endpoints
+│   └── server.js           # Entry point & WebSocket logic
+├── .env                    # Environment variables (Sensitive)
+├── package.json            # Project dependencies & scripts
+└── README.md               # Project documentation
+```
 
-- Node.js (v14 or higher recommended)
-- MongoDB (Local instance or Atlas URI)
+## 🚀 Getting Started
 
-## Installation
+### Prerequisites
 
-1.  Clone the repository:
-    ```bash
-    git clone <repository-url>
-    cd SocketChat
-    ```
+- [Node.js](https://nodejs.org/) (v16+ recommended)
+- [MongoDB](https://www.mongodb.com/) (Local or Atlas)
 
-2.  Install dependencies:
-    ```bash
-    npm install
-    ```
+### Setup
 
-## Usage
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/Amulya-Poudyal/SocketChat.git
+   cd SocketChat
+   ```
 
-1.  Start your MongoDB server.
-2.  Run the application:
-    ```bash
-    npm start
-    ```
-    *(Note: If `npm start` is not defined, try `node index.js` or `node server.js`)*
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-3.  Open your browser and navigate to `http://localhost:3000` (or the port specified in the console).
+3. **Configure Environment Variables**:
+   Create a `.env` file in the root directory and add the following:
+   ```env
+   PORT=3000
+   DATABASE_URL=your_mongodb_connection_string
+   JWT_SECRET=your_super_secret_key
+   ```
 
-## License
+4. **Run the application**:
+   ```bash
+   npm start
+   ```
 
-This project is open source.
+5. **Access the app**:
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## 📝 Roadmap
+
+- [ ] Support for multiple chat rooms/channels.
+- [ ] Direct messaging between users.
+- [ ] Profile picture uploads.
+- [ ] Message reactions and emojis.
+
+## 📄 License
+
+This project is open-source. Feel free to contribute!

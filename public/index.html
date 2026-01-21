@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SocketChat - Real-time Messaging</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .container {
+            text-align: center;
+            background: var(--container-bg);
+            backdrop-filter: blur(12px);
+            padding: 60px 40px;
+            border-radius: 32px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--input-border);
+            max-width: 500px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        p {
+            color: var(--text-dim);
+            font-size: 1.125rem;
+            margin-bottom: 40px;
+            line-height: 1.6;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+            box-shadow: 0 4px 6px -1px rgba(139, 92, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border: 1px solid var(--input-border);
+        }
+
+        button {
+            width: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>SocketChat</h1>
+        <p>Experience seamless, real-time communication with a simple and elegant interface. Privacy-focused and
+            blistering fast.</p>
+        <div class="btn-group">
+            <button class="btn-primary" onclick="location.href='login.html'">Get Started</button>
+            <button class="btn-secondary" onclick="location.href='register.html'">Create Account</button>
+        </div>
+    </div>
+</body>
+
+</html>

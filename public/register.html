@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - SocketChat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="auth-container">
+        <h2>Join SocketChat</h2>
+        <div class="input-group">
+            <label for="username">Username</label>
+            <input id="username" placeholder="Choose a username">
+        </div>
+        <div class="input-group">
+            <label for="password">Password</label>
+            <input id="password" placeholder="••••••••" type="password">
+        </div>
+        <button onclick="registerUser()">Create Account</button>
+        <div id="error" class="error"></div>
+        <span class="link" onclick="location.href='login.html'">Already have an account? Sign In</span>
+    </div>
+
+    <script src="js/utils.js"></script>
+    <script src="js/register.js"></script>
+</body>
+
+</html>

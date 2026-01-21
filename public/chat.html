@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - SocketChat</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/chat.css">
+</head>
+
+<body>
+    <div class="sidebar">
+        <h1 style="font-size: 1.5rem; text-align: left;">SocketChat</h1>
+        <div style="margin-top: 40px;">
+            <p style="color: var(--text-dim); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;">
+                Channels</p>
+            <div
+                style="color: white; padding: 10px; background: rgba(139, 92, 246, 0.1); border-radius: 8px; font-weight: 500;">
+                # general-chat
+            </div>
+        </div>
+        <div style="margin-top: auto; display: flex; flex-direction: column; gap: 20px;">
+            <div id="currentUser" style="font-size: 0.9rem; color: var(--text-dim);"></div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="main-chat">
+        <div class="header">
+            <h2># general-chat</h2>
+            <div id="status" style="font-size: 0.75rem; color: #10b981;">● Connected</div>
+        </div>
+        <div id="messages"></div>
+        <div class="input-area">
+            <input id="messageInput" placeholder="Message #general-chat">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script src="js/chat.js"></script>
+</body>
+
+</html>
