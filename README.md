@@ -1,15 +1,23 @@
 # SocketChat 🚀
 
-SocketChat is a modern, real-time messaging application built with a robust Node.js backend and a sleek, glassmorphic frontend. It features secure authentication, persistent chat history, and instantaneous message delivery using WebSockets.
+SocketChat is a modern, real-time messaging application built with a robust Node.js backend and a sleek, glassmorphic frontend. It features secure authentication, multi-channel support, administrative dashboards, and instantaneous message delivery using WebSockets.
 
 ## ✨ Features
 
-- **Real-time Messaging**: Instant communication powered by WebSockets (`ws`).
+- **Real-time Messaging**: Instant communication powered by WebSockets (`ws`) with support for multiple themed channels.
+- **Channel Management**: 
+    - **Public & Private Channels**: Create unrestricted public rooms or secure private channels.
+    - **Invite Links**: Secure, auto-generated invite codes and direct URLs for easy joining.
+    - **Fallback Copy**: Robust clipboard support that works even on non-HTTPS/IP-based connections.
+- **Administrative Control**:
+    - **Owner Dashboard**: Channel creators can view member counts, join dates, and manage their rooms.
+    - **Admin Dashboard**: Site-wide administrators can monitor all system activity and channels.
+    - **System Notifications**: Private "User Joined/Left" alerts broadcasted exclusively to owners and admins.
+- **User Experience**:
+    - **Typing Indicators**: In-chat visual feedback when someone is typing.
+    - **Profile Management**: View account details, joined date, and administrative status.
 - **Secure Authentication**: JWT-based user login and registration with hashed passwords.
-- **Persistent Storage**: MongoDB for storing users and chat history.
-- **Message History**: Automatic retrieval of recent chat history upon connection.
-- **Modern UI**: A beautiful, responsive interface with Outfit typography and glassmorphic design.
-- **Systematic Organization**: Clean separation of concerns between frontend and backend.
+- **Modern UI**: A premium, responsive interface with Outfit typography and glassmorphic aesthetics.
 
 ## 🛠️ Tech Stack
 
@@ -26,16 +34,17 @@ SocketChat/
 ├── public/                 # Frontend assets
 │   ├── css/                # Stylesheets (Shared & Page-specific)
 │   ├── js/                 # Client-side logic & API handlers
-│   ├── index.html          # Landing page
+│   ├── chat.html           # Main multi-channel chat interface
+│   ├── profile.html        # User profile & Admin link
+│   ├── admin.html          # Site-wide administration portal
 │   ├── login.html          # Authentication page
-│   ├── register.html       # Signup page
-│   └── chat.html           # Main chat interface
+│   └── register.html       # Signup page
 ├── server/                 # Backend source code
-│   ├── controllers/        # Request handlers
-│   ├── middlewares/        # Authentication & Logger middlewares
-│   ├── models/             # Mongoose schemas
+│   ├── controllers/        # Request handlers (Auth, Channels, Messages)
+│   ├── middlewares/        # Authentication & Role verification
+│   ├── models/             # Mongoose schemas (User, Channel, Message)
 │   ├── routes/             # API endpoints
-│   └── server.js           # Entry point & WebSocket logic
+│   └── server.js           # Entry point & WebSocket room logic
 ├── .env                    # Environment variables (Sensitive)
 ├── package.json            # Project dependencies & scripts
 └── README.md               # Project documentation
@@ -77,12 +86,14 @@ SocketChat/
 5. **Access the app**:
    Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## 📝 Roadmap
+## 🔑 Administrative Access
 
-- [ ] Support for multiple chat rooms/channels.
-- [ ] Direct messaging between users.
-- [ ] Profile picture uploads.
-- [ ] Message reactions and emojis.
+To promote a user to **Site Admin**, you can use the built-in development route via Postman or the browser console:
+
+```javascript
+fetch('/auth/promote-admin/YOUR_USERNAME', { method: 'POST' });
+```
+*Note: Once promoted, log out and log back in to refresh your security token.*
 
 ## 📄 License
 
