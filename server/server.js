@@ -11,12 +11,16 @@ import messageRouter from "./routes/messageRoutes.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
 import userRoutes from './routes/userRoutes.js';
+import channelRoutes from './routes/channelRoutes.js';
+import Channel from "./models/channel.js";
+import User from "./models/user.js";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
+app.set('wss', wss);
 
 const PORT = process.env.PORT || 3000;
 
@@ -29,7 +33,8 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use("/auth", authRouter);
 app.use("/messages", messageRouter);
 app.use("/", authRouter);
-app.use("/user",userRoutes);
+app.use("/user", userRoutes);
+app.use("/channels", channelRoutes);
 wss.on("connection", async (ws, req) => {
     try {
         const url = new URL(req.url, `http://${req.headers.host}`);
@@ -43,23 +48,11 @@ wss.on("connection", async (ws, req) => {
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your_secret_key');
         ws.username = decoded.username;
+        ws.userId = decoded.id;
+        ws.isAdmin = decoded.isAdmin;
+        ws.currentChannel = null;
 
         console.log("WS connected:", ws.username);
-
-        // ✅ Send chat history (last 50)
-        const messages = await Message.find()
-            .sort({ createdAt: -1 })
-            .limit(50)
-            .lean();
-
-        ws.send(JSON.stringify({
-            type: "history",
-            payload: messages.reverse().map(m => ({
-                username: m.sender,
-                text: m.text,
-                timestamp: new Date(m.createdAt).toLocaleTimeString()
-            }))
-        }));
 
     } catch (err) {
         console.error("WS Auth Error:", err.message);
@@ -71,11 +64,52 @@ wss.on("connection", async (ws, req) => {
         try {
             const data = JSON.parse(message.toString());
 
+            if (data.type === "join") {
+                const { channelId } = data.payload;
+                ws.currentChannel = channelId;
+
+                // Send chat history for this channel (last 50)
+                const messages = await Message.find({ channel: channelId })
+                    .sort({ createdAt: -1 })
+                    .limit(50)
+                    .lean();
+
+                ws.send(JSON.stringify({
+                    type: "history",
+                    payload: messages.reverse().map(m => ({
+                        username: m.sender,
+                        text: m.text,
+                        timestamp: new Date(m.createdAt).toLocaleTimeString()
+                    }))
+                }));
+                return;
+            }
+
+            if (data.type === "typing") {
+                const broadcastData = JSON.stringify({
+                    type: "typing",
+                    payload: {
+                        username: ws.username,
+                        isTyping: data.payload.isTyping,
+                        channelId: ws.currentChannel
+                    }
+                });
+
+                wss.clients.forEach(client => {
+                    if (client.readyState === 1 && client.currentChannel === ws.currentChannel && client !== ws) {
+                        client.send(broadcastData);
+                    }
+                });
+                return;
+            }
+
             if (data.type !== "chat") return;
+            if (!ws.currentChannel) return;
 
             const messageObject = {
                 sender: ws.username,
                 text: data.payload.text,
+                channel: ws.currentChannel
             };
 
             const savedMessage = await new Message(messageObject).save();
@@ -85,12 +119,13 @@ wss.on("connection", async (ws, req) => {
                 payload: {
                     username: ws.username,
                     text: savedMessage.text,
-                    timestamp: new Date(savedMessage.createdAt).toLocaleTimeString()
+                    timestamp: new Date(savedMessage.createdAt).toLocaleTimeString(),
+                    channelId: ws.currentChannel
                 }
             });
 
             wss.clients.forEach(client => {
-                if (client.readyState === 1) { // WebSocket.OPEN is 1
+                if (client.readyState === 1 && client.currentChannel === ws.currentChannel) {
                     client.send(broadcastData);
                 }
             });

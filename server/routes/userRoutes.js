@@ -15,7 +15,8 @@ router.get("/profile", verifyToken, async (req, res) => {
 
         res.json({
             username: user.username,
-            createdAt: user.createdAt
+            createdAt: user.createdAt,
+            isAdmin: user.isAdmin
         });
     } catch (err) {
         console.error(err);

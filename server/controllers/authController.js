@@ -22,6 +22,16 @@ export const registerUser = async (req, res) => {
     }
 };
 
+export const promoteToAdmin = async (req, res) => {
+    try {
+        const { username } = req.params;
+        await User.findOneAndUpdate({ username }, { isAdmin: true });
+        res.json({ message: `${username} is now an admin` });
+    } catch (err) {
+        res.status(500).json({ message: "Server error" });
+    }
+};
+
 // ---------------- LOGIN ----------------
 export const loginUser = async (req, res) => {
     const { username, password } = req.body;
@@ -35,7 +45,7 @@ export const loginUser = async (req, res) => {
         if (!isMatch) return res.status(401).json({ message: "Invalid credentials" });
 
         const token = jwt.sign(
-            { id: user._id, username: user.username },
+            { id: user._id, username: user.username, isAdmin: user.isAdmin },
             process.env.JWT_SECRET,
             { expiresIn: "1h" }
         );

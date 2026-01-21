@@ -84,6 +84,12 @@
             <div class="info-value" id="createdAt">Loading...</div>
         </div>
 
+        <div id="adminPanel" style="display: none; margin-bottom: 24px;">
+            <button onclick="location.href='admin.html'"
+                style="background: rgba(139, 92, 246, 0.1); color: var(--primary-color); border: 1px solid var(--primary-color); box-shadow: none;">Admin
+                Dashboard</button>
+        </div>
+
         <button onclick="logout()"
             style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); box-shadow: none;">Logout</button>
         <a href="chat.html" class="back-link">← Back to Chat</a>
@@ -110,6 +116,10 @@
                     day: 'numeric'
                 });
                 document.getElementById("avatar").textContent = user.username[0].toUpperCase();
+
+                if (user.isAdmin) {
+                    document.getElementById("adminPanel").style.display = "block";
+                }
             })
             .catch(() => {
                 localStorage.clear();
