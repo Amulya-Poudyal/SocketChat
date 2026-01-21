@@ -10,7 +10,7 @@ import { authRouter } from "./routes/authRoutes.js";
 import messageRouter from "./routes/messageRoutes.js";
 import path from 'path';
 import { fileURLToPath } from 'url';
-
+import userRoutes from './routes/userRoutes.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -29,6 +29,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use("/auth", authRouter);
 app.use("/messages", messageRouter);
 app.use("/", authRouter);
+app.use("/user",userRoutes);
 wss.on("connection", async (ws, req) => {
     try {
         const url = new URL(req.url, `http://${req.headers.host}`);

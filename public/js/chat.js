@@ -12,7 +12,7 @@ const messagesDiv = document.getElementById("messages");
 
 function connectWebSocket() {
     const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
-    const wsUrl = `${protocol}//${window.location.hostname}:3000?token=${token}`;
+    const wsUrl = `${protocol}//${window.location.host}?token=${token}`;
 
     ws = new WebSocket(wsUrl);
 

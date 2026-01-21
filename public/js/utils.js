@@ -1,4 +1,4 @@
-const API_URL = `${window.location.protocol}//${window.location.hostname}:3000`;
+const API_URL = ""; // Use relative URLs since frontend is served by backend
 
 function showError(message) {
     const errorDiv = document.getElementById('error');
