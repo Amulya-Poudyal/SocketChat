@@ -14,6 +14,7 @@ import userRoutes from './routes/userRoutes.js';
 import channelRoutes from './routes/channelRoutes.js';
 import Channel from "./models/channel.js";
 import User from "./models/user.js";
+import { getOrCreateGeneralChannel } from "./utils/defaultChannel.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -156,8 +157,12 @@ if (!DATABASE_URL) {
 }
 
 mongoose.connect(DATABASE_URL)
-    .then(() => {
+    .then(async () => {
         console.log("✅ Database connected");
+
+        // Initialize the default #general channel
+        await getOrCreateGeneralChannel();
+
         server.listen(PORT, () => {
             console.log(`🚀 Server started on http://localhost:${PORT}`);
         });

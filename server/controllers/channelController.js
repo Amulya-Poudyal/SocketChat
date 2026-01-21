@@ -58,7 +58,7 @@ export const joinChannel = async (req, res) => {
 
             // Broadcast to owner and admins
             const wss = req.app.get('wss');
-            const ownerId = channel.owner.toString();
+            const ownerId = channel.owner ? channel.owner.toString() : null;
             if (wss) {
                 const broadcastData = JSON.stringify({
                     type: "system",
@@ -70,7 +70,8 @@ export const joinChannel = async (req, res) => {
 
                 wss.clients.forEach(client => {
                     if (client.readyState === 1 && client.currentChannel === channel._id.toString()) {
-                        if (client.userId === ownerId || client.isAdmin) {
+                        // Send to owner (if exists) or admins
+                        if ((ownerId && client.userId === ownerId) || client.isAdmin) {
                             client.send(broadcastData);
                         }
                     }
@@ -93,7 +94,12 @@ export const leaveChannel = async (req, res) => {
         const channel = await Channel.findById(channelId);
         if (!channel) return res.status(404).json({ message: "Channel not found" });
 
-        const ownerId = channel.owner.toString();
+        // Prevent users from leaving the #general channel
+        if (channel.name === "general") {
+            return res.status(400).json({ message: "You cannot leave the #general channel" });
+        }
+
+        const ownerId = channel.owner ? channel.owner.toString() : null;
         channel.members = channel.members.filter(m => m.toString() !== userId);
         await channel.save();
 
@@ -110,7 +116,8 @@ export const leaveChannel = async (req, res) => {
 
             wss.clients.forEach(client => {
                 if (client.readyState === 1 && client.currentChannel === channelId.toString()) {
-                    if (client.userId === ownerId || client.isAdmin) {
+                    // Send to owner (if exists) or admins
+                    if ((ownerId && client.userId === ownerId) || client.isAdmin) {
                         client.send(broadcastData);
                     }
                 }
@@ -119,6 +126,7 @@ export const leaveChannel = async (req, res) => {
 
         res.json({ message: "Left channel successfully" });
     } catch (err) {
+        console.error("Leave channel error:", err);
         res.status(500).json({ message: "Server error" });
     }
 };
@@ -131,12 +139,13 @@ export const getChannelInfo = async (req, res) => {
         const channel = await Channel.findById(channelId).populate('owner', 'username').populate('members', 'username createdAt');
         if (!channel) return res.status(404).json({ message: "Channel not found" });
 
-        const isOwner = channel.owner._id.toString() === userId;
+        // System channels (like #general) don't have an owner
+        const isOwner = channel.owner ? channel.owner._id.toString() === userId : false;
 
         // Return detailed info if owner, otherwise basic info
         res.json({
             name: channel.name,
-            owner: channel.owner.username,
+            owner: channel.owner ? channel.owner.username : "System",
             isOwner,
             memberCount: channel.members.length,
             inviteCode: isOwner ? channel.inviteCode : null,

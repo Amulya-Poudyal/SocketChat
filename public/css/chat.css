@@ -1,8 +1,15 @@
 body {
     display: flex;
     height: 100vh;
+    /* Fallback */
+    height: 100dvh;
     justify-content: flex-start;
     align-items: stretch;
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    /* Override style.css padding */
+    box-sizing: border-box;
 }
 
 .sidebar {
@@ -120,7 +127,7 @@ h2 {
 .input-area button {
     width: auto;
     margin-top: 0;
-    padding: 0 24px;
+    padding: 12px 24px;
 }
 
 .logout-btn,
@@ -222,15 +229,22 @@ h2 {
         left: -280px;
         top: 0;
         height: 100vh;
+        /* Fallback */
+        height: 100dvh;
         width: 260px;
         z-index: 1000;
-        transition: left 0.3s ease-in-out;
+        transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+        transform: translateX(0);
+        /* Using transform instead of left for performance */
         overflow-y: auto;
         box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+        padding-top: max(20px, env(safe-area-inset-top));
+        padding-bottom: max(20px, env(safe-area-inset-bottom));
+        will-change: transform;
     }
 
     .sidebar.open {
-        left: 0;
+        transform: translateX(280px);
     }
 
     .sidebar-overlay.active {

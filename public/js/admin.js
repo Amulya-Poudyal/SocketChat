@@ -25,7 +25,7 @@ async function loadAdminData() {
             const tr = document.createElement("tr");
             tr.innerHTML = `
                 <td style="font-weight: 600;"># ${ch.name}</td>
-                <td>${ch.owner ? ch.owner.username : 'Unknown'}</td>
+                <td>${ch.owner ? ch.owner.username : 'System'}</td>
                 <td>${ch.members.length}</td>
                 <td><span class="badge ${ch.isPrivate ? 'badge-private' : 'badge-public'}">${ch.isPrivate ? 'Private' : 'Public'}</span></td>
                 <td><code style="background: rgba(0,0,0,0.3); padding: 2px 5px; border-radius: 3px;">${ch.inviteCode}</code></td>

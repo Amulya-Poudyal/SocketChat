@@ -1,5 +1,6 @@
 import User from "../models/user.js";
 import bcrypt from 'bcrypt';
+import { addUserToGeneralChannel } from "../utils/defaultChannel.js";
 import jwt from 'jsonwebtoken';
 // ---------------- REGISTER ----------------
 export const registerUser = async (req, res) => {
@@ -14,6 +15,8 @@ export const registerUser = async (req, res) => {
         const newUser = new User({ username, password: hashedPassword });
         await newUser.save();
 
+        // Automatically add new user to #general channel
+        await addUserToGeneralChannel(newUser._id);
 
         res.json({ success: true, username });
     } catch (err) {

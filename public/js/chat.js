@@ -364,7 +364,11 @@ function appendSystemMessage(text) {
 function sendMessage() {
     const input = document.getElementById("messageInput");
     const text = input.value.trim();
-    if (!text || !currentChannelId) return;
+    if (!currentChannelId) {
+        alert("Please select a channel to start chatting.");
+        return;
+    }
+    if (!text) return;
 
     if (ws && ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify({
@@ -374,6 +378,10 @@ function sendMessage() {
         input.value = "";
     } else {
         console.error("WebSocket is not connected.");
+        document.getElementById("status").textContent = "○ Disconnected (Click to Retry)";
+        document.getElementById("status").style.cursor = "pointer";
+        document.getElementById("status").onclick = () => location.reload();
+        alert("Connection lost. Please check your internet or refresh the page.");
     }
 }
 
@@ -393,6 +401,13 @@ function toggleSidebar() {
 
     sidebar.classList.toggle("open");
     overlay.classList.toggle("active");
+
+    // Lock body scroll when sidebar is open on mobile
+    if (sidebar.classList.contains("open")) {
+        document.body.style.overflow = "hidden";
+    } else {
+        document.body.style.overflow = "";
+    }
 }
 
 // Close sidebar when clicking on a channel (mobile)
@@ -406,6 +421,7 @@ switchChannel = function (id, name, inviteCode) {
         const overlay = document.querySelector(".sidebar-overlay");
         sidebar.classList.remove("open");
         overlay.classList.remove("active");
+        document.body.style.overflow = "";
     }
 };
 
